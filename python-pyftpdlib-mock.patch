@@ -1,0 +1,16 @@
+Don't require standalone mock package if unittest.mock is available in standard library (python3 case)
+
+--- pyftpdlib-1.5.1/pyftpdlib/test/test_functional.py.orig	2016-05-02 15:28:11.000000000 +0200
++++ pyftpdlib-1.5.1/pyftpdlib/test/test_functional.py	2017-03-24 18:59:25.223862613 +0100
+@@ -20,7 +20,10 @@
+ import time
+ import warnings
+ 
+-import mock
++try:
++    from unittest import mock
++except ImportError:
++    import mock
+ 
+ from pyftpdlib._compat import b
+ from pyftpdlib._compat import PY3
