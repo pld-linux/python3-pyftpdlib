@@ -1,21 +1,21 @@
 #
 # Conditional build:
-%bcond_without	tests	# unit tests
+%bcond_without	tests	# unit tests (can fail under heavy system load)
 %bcond_without	python2 # CPython 2.x module
 %bcond_without	python3 # CPython 3.x module
 
 Summary:	Very fast asynchronous FTP server library for Python 2
 Summary(pl.UTF-8):	Bardzo szybka biblioteka asynchronicznego serwera FTP dla Pythona 2
 Name:		python-pyftpdlib
-Version:	1.5.1
-Release:	2
+Version:	1.5.5
+Release:	1
 License:	MIT
 Group:		Libraries/Python
 #Source0Download: https://pypi.python.org/simple/pyftpdlib/
 Source0:	https://files.pythonhosted.org/packages/source/p/pyftpdlib/pyftpdlib-%{version}.tar.gz
-# Source0-md5:	61b23e2362df23d0dfa5fe76f6e2ab55
-Patch0:		%{name}-mock.patch
-Patch1:		%{name}-tests.patch
+# Source0-md5:	7f8089520d60171bee5dab2b721e8d00
+Patch0:		%{name}-tests.patch
+Patch1:		%{name}-sendfile.patch
 URL:		https://github.com/giampaolo/pyftpdlib/
 %if %{with python2}
 BuildRequires:	python-modules >= 1:2.6
@@ -26,13 +26,10 @@ BuildRequires:	python-pysendfile >= 1.5
 %endif
 %endif
 %if %{with python3}
-BuildRequires:	python3-modules >= 1:3.2
+BuildRequires:	python3-modules >= 1:3.4
 BuildRequires:	python3-setuptools
 %if %{with tests}
 BuildRequires:	python3-pyOpenSSL
-%if "%{py3_ver}" < "3.3"
-BuildRequires:	python3-pysendfile >= 1.5
-%endif
 %endif
 %endif
 BuildRequires:	rpm-pythonprov
@@ -60,11 +57,8 @@ języka programowania.
 Summary:	Very fast asynchronous FTP server library for Python 3
 Summary(pl.UTF-8):	Bardzo szybka biblioteka asynchronicznego serwera FTP dla Pythona 3
 Group:		Libraries/Python
-Requires:	python3-modules >= 1:3.2
+Requires:	python3-modules >= 1:3.4
 Suggests:	python3-pyOpenSSL
-%if "%{py3_ver}" < "3.3"
-Suggests:	python3-pysendfile >= 1.5
-%endif
 
 %description -n python3-pyftpdlib
 Python FTP server library provides a high-level portable interface to
