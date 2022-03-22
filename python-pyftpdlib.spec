@@ -7,15 +7,14 @@
 Summary:	Very fast asynchronous FTP server library for Python 2
 Summary(pl.UTF-8):	Bardzo szybka biblioteka asynchronicznego serwera FTP dla Pythona 2
 Name:		python-pyftpdlib
-Version:	1.5.5
-Release:	4
+Version:	1.5.6
+Release:	1
 License:	MIT
 Group:		Libraries/Python
 #Source0Download: https://pypi.python.org/simple/pyftpdlib/
 Source0:	https://files.pythonhosted.org/packages/source/p/pyftpdlib/pyftpdlib-%{version}.tar.gz
-# Source0-md5:	7f8089520d60171bee5dab2b721e8d00
+# Source0-md5:	459dd3e685c4b7dfcf574ca05e5586eb
 Patch0:		%{name}-tests.patch
-Patch1:		%{name}-sendfile.patch
 URL:		https://github.com/giampaolo/pyftpdlib/
 %if %{with python2}
 BuildRequires:	python-modules >= 1:2.6
@@ -76,7 +75,6 @@ języka programowania.
 %prep
 %setup -q -n pyftpdlib-%{version}
 %patch0 -p1
-%patch1 -p1
 
 %build
 %if %{with python2}
