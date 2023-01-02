@@ -7,14 +7,13 @@
 Summary:	Very fast asynchronous FTP server library for Python 2
 Summary(pl.UTF-8):	Bardzo szybka biblioteka asynchronicznego serwera FTP dla Pythona 2
 Name:		python-pyftpdlib
-Version:	1.5.6
-Release:	4
+Version:	1.5.7
+Release:	1
 License:	MIT
 Group:		Libraries/Python
 #Source0Download: https://pypi.python.org/simple/pyftpdlib/
 Source0:	https://files.pythonhosted.org/packages/source/p/pyftpdlib/pyftpdlib-%{version}.tar.gz
-# Source0-md5:	459dd3e685c4b7dfcf574ca05e5586eb
-Patch0:		%{name}-tests.patch
+# Source0-md5:	6d9539aea866d4f959d86ae001cdddf7
 URL:		https://github.com/giampaolo/pyftpdlib/
 %if %{with python2}
 BuildRequires:	python-modules >= 1:2.6
@@ -74,7 +73,6 @@ języka programowania.
 
 %prep
 %setup -q -n pyftpdlib-%{version}
-%patch0 -p1
 
 %build
 %if %{with python2}
@@ -116,14 +114,14 @@ rm -rf $RPM_BUILD_ROOT
 %if %{with python2}
 install -d $RPM_BUILD_ROOT%{_examplesdir}/%{name}-%{version}
 cp -a demo/* $RPM_BUILD_ROOT%{_examplesdir}/%{name}-%{version}
-%{__sed} -E -i -e '1s,#!\s*/usr/bin/env\s+python(\s|$),#!%{__python}\1,' \
-     $RPM_BUILD_ROOT%{_examplesdir}/%{name}-%{version}/*.py
+%{__sed} -i -e '1s,/usr/bin/env python3,%{__python},' \
+	$RPM_BUILD_ROOT%{_examplesdir}/%{name}-%{version}/*.py
 %endif
 %if %{with python3}
 install -d $RPM_BUILD_ROOT%{_examplesdir}/python3-pyftpdlib-%{version}
 cp -a demo/* $RPM_BUILD_ROOT%{_examplesdir}/python3-pyftpdlib-%{version}
-%{__sed} -E -i -e '1s,#!\s*/usr/bin/env\s+python(\s|$),#!%{__python3}\1,' \
-     $RPM_BUILD_ROOT%{_examplesdir}/python3-pyftpdlib-%{version}/*.py
+%{__sed} -i -e '1s,/usr/bin/env python3,%{__python3},' \
+	$RPM_BUILD_ROOT%{_examplesdir}/python3-pyftpdlib-%{version}/*.py
 %endif
 
 %clean
