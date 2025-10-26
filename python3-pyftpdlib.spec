@@ -18,6 +18,7 @@ URL:		https://github.com/giampaolo/pyftpdlib/
 BuildRequires:	python3-modules >= 1:3.6
 BuildRequires:	python3-setuptools
 %if %{with tests}
+BuildRequires:	python3-psutil
 BuildRequires:	python3-pyOpenSSL
 %if "%{py3_ver}" >= "3.12"
 BuildRequires:	python3-pyasynchat
