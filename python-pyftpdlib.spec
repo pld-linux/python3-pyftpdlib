@@ -1,26 +1,29 @@
 #
 # Conditional build:
-%bcond_with	tests	# unit tests (can fail under heavy system load)
-%bcond_without	python2 # CPython 2.x module
-%bcond_without	python3 # CPython 3.x module
+%bcond_without	tests		# unit tests (can fail under heavy system load)
+%bcond_with	tests_net	# functional tests, localhost networking required
+%bcond_without	python2		# CPython 2.x module
+%bcond_without	python3		# CPython 3.x module
 
 Summary:	Very fast asynchronous FTP server library for Python 2
 Summary(pl.UTF-8):	Bardzo szybka biblioteka asynchronicznego serwera FTP dla Pythona 2
 Name:		python-pyftpdlib
-Version:	1.5.7
-Release:	3
+# keep 1.x here for python2 support
+Version:	1.5.10
+Release:	1
 License:	MIT
 Group:		Libraries/Python
 #Source0Download: https://pypi.python.org/simple/pyftpdlib/
 Source0:	https://files.pythonhosted.org/packages/source/p/pyftpdlib/pyftpdlib-%{version}.tar.gz
-# Source0-md5:	6d9539aea866d4f959d86ae001cdddf7
+# Source0-md5:	a07bad18db605c1e1a38087c170fddb8
 URL:		https://github.com/giampaolo/pyftpdlib/
 %if %{with python2}
-BuildRequires:	python-modules >= 1:2.6
+BuildRequires:	python-modules >= 1:2.7
 BuildRequires:	python-setuptools
 %if %{with tests}
 BuildRequires:	python-pyOpenSSL
 BuildRequires:	python-pysendfile >= 1.5
+BuildRequires:	python-pytest
 %endif
 %endif
 %if %{with python3}
@@ -28,11 +31,12 @@ BuildRequires:	python3-modules >= 1:3.4
 BuildRequires:	python3-setuptools
 %if %{with tests}
 BuildRequires:	python3-pyOpenSSL
+BuildRequires:	python3-pytest
 %endif
 %endif
 BuildRequires:	rpm-pythonprov
 BuildRequires:	rpmbuild(macros) >= 1.714
-Requires:	python-modules >= 1:2.6
+Requires:	python-modules >= 1:2.7
 Suggests:	python-pyOpenSSL
 Suggests:	python-pysendfile >= 1.5
 BuildArch:	noarch
@@ -79,8 +83,13 @@ języka programowania.
 %py_build
 
 %if %{with tests}
-PYTHONPATH=$(pwd)/build-2/lib \
-%{__python} pyftpdlib/test/runner.py
+PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 \
+%{__python} -m pytest pyftpdlib/test \
+%if %{without tests_net}
+	--ignore pyftpdlib/test/test_functional.py \
+	--ignore pyftpdlib/test/test_functional_ssl.py \
+	--ignore pyftpdlib/test/test_servers.py
+%endif
 %endif
 %endif
 
@@ -88,8 +97,13 @@ PYTHONPATH=$(pwd)/build-2/lib \
 %py3_build
 
 %if %{with tests}
-PYTHONPATH=$(pwd)/build-3/lib \
-%{__python3} pyftpdlib/test/runner.py
+PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 \
+%{__python3} -m pytest pyftpdlib/test \
+	--ignore pyftpdlib/test/test_functional.py \
+	--ignore pyftpdlib/test/test_functional_ssl.py \
+	--ignore pyftpdlib/test/test_servers.py
+%if %{without tests_net}
+%endif
 %endif
 %endif
 
@@ -110,7 +124,6 @@ rm -rf $RPM_BUILD_ROOT
 %{__rm} -r $RPM_BUILD_ROOT%{py3_sitescriptdir}/pyftpdlib/test
 %endif
 
-# in case there are examples provided
 %if %{with python2}
 install -d $RPM_BUILD_ROOT%{_examplesdir}/%{name}-%{version}
 cp -a demo/* $RPM_BUILD_ROOT%{_examplesdir}/%{name}-%{version}
