@@ -24,8 +24,8 @@ BuildRequires:	python3-pyasynchat
 BuildRequires:	python3-pyasyncore
 %endif
 BuildRequires:	python3-pytest
-#BuildRequires:	python3-pytest-instafail
-#BuildRequires:	python3-pytest-xdist
+BuildRequires:	python3-pytest-instafail
+BuildRequires:	python3-pytest-xdist
 %endif
 BuildRequires:	rpm-pythonprov
 BuildRequires:	rpmbuild(macros) >= 1.714
